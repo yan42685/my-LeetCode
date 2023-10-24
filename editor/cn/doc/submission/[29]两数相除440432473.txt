@@ -1,0 +1,40 @@
+
+public class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle overflow.
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Determine if the result is negative.
+        boolean isNegative = (dividend ^ divisor) < 0;
+
+        // in case dividend == Integer.MIN_VALUE && divisor != -1
+        long a = dividend >= 0 ? dividend : -(long) dividend;
+        long b = divisor >= 0 ? divisor : -(long) divisor;
+
+        int result = 0;
+
+        // While the divisor can still be subtracted from the dividend.
+        while (a >= b) {
+            // Calculate the number of times the divisor can be subtracted from the dividend.
+            long x = b;
+            long times = 1;
+            while ((x << 1) <= a) {
+                x <<= 1;
+                times <<= 1;
+            }
+
+            // Subtract the divisor from the dividend.
+            a -= x;
+            // Add the number of times the divisor was subtracted to the result.
+            result += times;
+        }
+
+        return isNegative ? -result : result;
+    }
+}
+
+
+//runtime:1 ms
+//memory:38.7 MB

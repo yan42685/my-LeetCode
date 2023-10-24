@@ -1,0 +1,32 @@
+//class Solution {
+//    public int divide(int dividend, int divisor) {
+//
+//    }
+//}
+
+public class Solution {
+    public int divide(int dividend, int divisor) {
+//        if (dividend == 0) return 0;
+        if (dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
+
+        // 判断结果正负，用异或实现，两数相同则为0，不同则为1
+        boolean negative = (dividend ^ divisor) < 0;
+
+        long a = Math.abs((long)dividend);
+        long b = Math.abs((long)divisor);
+        int result = 0;
+
+        // 首先找到最大的那个 2^n * divisor <= dividend
+        for (int i = 31; i >= 0; i--) {
+            if ((a>>i) >= b) {  // 找出足够大的数 2^n*divisor
+                result += 1<<i; // 将结果加上2^n
+                a -= b<<i;  // 将被除数减去 2^n * divisor
+            }
+        }
+        // 返回的时候判断符号
+        return negative ? -result : result;
+    }
+}
+
+//runtime:1 ms
+//memory:38.8 MB

@@ -1,0 +1,65 @@
+class Solution {
+    private static final int LENGTH = 10;
+    // 4进制
+    private static final int BASE = 4;
+
+    List<String> findRepeatedDnaSequences(String s) {
+        Set<Integer> seen = new HashSet<>();
+        Set<String> result = new HashSet<>();
+        int left = 0;
+        int right = 0;
+        int windowHash = 0;
+        while (right < s.length()) {
+            char c = s.charAt(right);
+            ++right;
+            windowHash = hash(windowHash, c, "expand");
+            if (right - left == LENGTH) {
+                if (seen.contains(windowHash)) {
+                    result.add(s.substring(left, right));
+                } else {
+                    seen.add(windowHash);
+                }
+                char removed = s.charAt(left);
+                ++left;
+                windowHash = hash(windowHash, removed, "shrink");
+            }
+        }
+        return new ArrayList<>(result);
+    }
+
+    // 将window内的字符串映射为4进制数
+    private int hash(int originHash, char character, String mode) {
+        int num = -1;
+        int result = -1;
+        // 四进制
+        switch (character) {
+            case 'A':
+                num = 0;
+                break;
+            case 'C':
+                num = 1;
+                break;
+            case 'G':
+                num = 2;
+                break;
+            case 'T':
+                num = 3;
+                break;
+            default:
+                return -1;
+        }
+        if ("expand".equals(mode)) {
+            // 最右侧添加一个数字
+            result = originHash * BASE + num;
+        } else if ("shrink".equals(mode)) {
+            // 最左侧移除一个数字
+            result = originHash - num * (int) Math.pow(BASE, LENGTH - 1);
+        } else {
+            result = -1;
+        }
+        return result;
+    }
+}
+
+//runtime:23 ms
+//memory:48.1 MB

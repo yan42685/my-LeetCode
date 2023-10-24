@@ -1,0 +1,53 @@
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ * int val;
+ * TreeNode left;
+ * TreeNode right;
+ * TreeNode() {}
+ * TreeNode(int val) { this.val = val; }
+ * TreeNode(int val, TreeNode left, TreeNode right) {
+ * this.val = val;
+ * this.left = left;
+ * this.right = right;
+ * }
+ * }
+ */
+
+// 因为没有重复元素，所以可以用Hashmap保存index
+//class Solution {
+//    private
+//    public TreeNode buildTree(int[] preorder, int[] inorder) {
+//
+//    }
+//}
+
+// 空间复杂度O(1), 时间复杂度O(n^2)
+class Solution {
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return build(preorder, inorder, 0, 0, inorder.length - 1);
+    }
+
+    private TreeNode build(int[] preorder, int[] inorder, int preorderIndex, int inorderLeft, int inorderRight) {
+        if (inorderLeft > inorderRight) {
+            return null;
+        }
+        int nodeValue = preorder[preorderIndex];
+        TreeNode node = new TreeNode(nodeValue);
+        int p = -1;
+        for (int i = inorderLeft; i <= inorderRight; i++) {
+            if (inorder[i] == nodeValue) {
+                p = i;
+                break;
+            }
+        }
+        node.left = build(preorder, inorder, preorderIndex + 1, inorderLeft, p - 1);
+        node.right = build(preorder, inorder, preorderIndex + 1 + p - inorderLeft, p + 1, inorderRight);
+        return node;
+    }
+}
+
+//runtime:3 ms
+//memory:41.9 MB
