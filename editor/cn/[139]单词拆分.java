@@ -1,0 +1,27 @@
+import java.util.HashSet;
+
+//leetcode submit region begin(Prohibit modification and deletion)
+/**
+ * 建议和140对比一下
+ */
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        HashSet<String> set = new HashSet<>(wordDict);
+        int maxLength = wordDict.stream().map(String::length).max(Integer::compareTo).orElse(0);
+        boolean[] dp = new boolean[maxLength];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            int curr = i % maxLength;
+            for (int j = Math.max(0, i - maxLength); j < i; j++) {
+                if (dp[j % maxLength] && set.contains(s.substring(j, i))) {
+                    dp[curr] = true;
+                    break;
+                }
+                dp[curr] = false;
+            }
+        }
+        return dp[s.length() % maxLength];
+    }
+}
+
+//leetcode submit region end(Prohibit modification and deletion)

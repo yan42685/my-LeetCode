@@ -1,23 +1,20 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
-
 class Solution {
     public int findMin(int[] nums) {
         int left = 0, right = nums.length - 1;
+        // 如果取最值(解一定存在)则不写等号，  如果解不一定存在原数组则写等号
         while (left < right) {
-            // 左中心 相同元素收缩右侧 保证 mid != right 避免死循环
             int mid = left + (right - left) / 2;
-            // 因为mid可能等于left, 所以只比较mid和right
+            // 与左边比较没有分类讨论的条件(不管比左边小还是大，都是收缩右边)，只能与右边比较了
             if (nums[mid] < nums[right]) {
                 right = mid;
-            } else if (nums[mid] > nums[right]) {
-                left = mid + 1;
-                // 如果没有重复数字，这段代码不会执行
             } else {
-                --right;
+                left = mid + 1;
             }
         }
         return nums[left];
     }
 }
+
 //leetcode submit region end(Prohibit modification and deletion)
