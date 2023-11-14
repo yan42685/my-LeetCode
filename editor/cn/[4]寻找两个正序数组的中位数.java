@@ -21,24 +21,35 @@ public class Solution {
      * 一般情况每次排除Math.min(k/2, nums1.length - i) 或 Math.min(k/2, nums2.length-j)个数
      * 边界条件是i == nums1.length || j == nums2.length || k == 1
      */
+
 //    public int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
-//        if (i == nums1.length) {
+//        if (i >= nums1.length) {
 //            return nums2[j + k - 1];
 //        }
-//        if (j == nums2.length) {
+//        if (j >= nums2.length) {
 //            return nums1[i + k - 1];
 //        }
 //        if (k == 1) {
 //            return Math.min(nums1[i], nums2[j]);
 //        }
-//        int nextI = Math.min(i + k / 2, nums1.length);
-//        int nextJ = Math.min(j + k / 2, nums2.length);
-//        if (nums1[i] <= nums2[j]) {
-//            return findKth(nums1, nums2, k - (nextI - i), nextI, j);
+//
+//        int lastToBeExcluded1 = Integer.MAX_VALUE;
+//        int lastTobeExcluded2 = Integer.MAX_VALUE;
+//        if (i + k / 2 - 1 < nums1.length) {
+//            lastToBeExcluded1 = nums1[i + k / 2 - 1];
+//        }
+//        if (j + k / 2 - 1 < nums2.length) {
+//            lastTobeExcluded2 = nums2[j + k / 2 - 1];
+//        }
+//
+//        // 必定会排除2/k个元素
+//        if (lastToBeExcluded1 <= lastTobeExcluded2) {
+//            return findKth(nums1, nums2, k - k / 2, i + k / 2, j);
 //        } else {
-//            return findKth(nums1, nums2, k - (nextJ - j), i, nextJ);
+//            return findKth(nums1, nums2, k - k / 2, i, j + k / 2);
 //        }
 //    }
+
     public int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
         if (i == nums1.length) {
             return nums2[j + k - 1];
@@ -50,18 +61,14 @@ public class Solution {
             return Math.min(nums1[i], nums2[j]);
         }
 
-        int mid1 = Integer.MAX_VALUE, mid2 = Integer.MAX_VALUE;
-        if (i + k / 2 - 1 < nums1.length) {
-            mid1 = nums1[i + k / 2 - 1];
-        }
-        if (j + k / 2 - 1 < nums2.length) {
-            mid2 = nums2[j + k / 2 - 1];
-        }
+        // 计算两个数组中待比较元素的索引
+        int idx1 = Math.min(i + k / 2 - 1, nums1.length - 1);
+        int idx2 = Math.min(j + k / 2 - 1, nums2.length - 1);
 
-        if (mid1 < mid2) {
-            return findKth(nums1, nums2, k - k / 2, i + k / 2, j);
+        if (nums1[idx1] <= nums2[idx2]) {
+            return findKth(nums1, nums2, k - (idx1 - i + 1), idx1 + 1, j);
         } else {
-            return findKth(nums1, nums2, k - k / 2, i, j + k / 2);
+            return findKth(nums1, nums2, k - (idx2 - j + 1), i, idx2 + 1);
         }
     }
 }
