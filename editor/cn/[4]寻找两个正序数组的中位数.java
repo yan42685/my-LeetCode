@@ -18,7 +18,7 @@ public class Solution {
     /**
      * 作用：找到两个有序数组中第k小的元素
      * 原理：
-     * 初始解空间是nums1[0, x] nums2[0, y]  x+y == k-1或k-2 所以必定存在x<=k/2<=y 或y<=k/2<=x
+     * 解空间是nums1[i, x] nums2[j, y]  x-i+y-j == k-1或k-2 所以必定存在x<=k/2<=y 或y<=k/2<=x
      * i和j是解空间起点
      * 一般情况每次排除Math.min(k/2, nums1.length - i) 或 Math.min(k/2, nums2.length-j)个数
      * 边界条件是i == nums1.length || j == nums2.length || k-1 == 0
