@@ -1,9 +1,45 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 
+import java.util.LinkedList;
+
 public class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-
+        int numsCount = nums1.length + nums2.length;
+        // 奇数
+        if (numsCount % 2 == 1) {
+            return findKth(nums1, nums2, numsCount / 2 + 1);
+        } else {
+            double leftMidian = findKth(nums1, nums2, numsCount / 2);
+            double rightMidian = findKth(nums1, nums2, numsCount / 2 + 1);
+            return (leftMidian + rightMidian) / 2.0;
+        }
     }
+
+    /**
+     * k从1开始算, i和j从1开始算，右开区间
+     * 一般情况的解空间是nums1前面 i+1 个数，和nums2前面 j+1个数，其中i+j == k+1
+     * 一般情况每次排除Math.min(k/2, nums1.length - i) 或 Math.min(k/2, nums2.length-j)个数
+     * 边界条件是i == nums1.length || j == nums2.length || k == 1
+     */
+    public int findKth(int[] nums1, int[] nums2, int i, int j, int k) {
+        if (i == nums1.length) {
+            return nums2[j + k - 1];
+        }
+        if (j == nums2.length) {
+            return nums1[i + k - 1];
+        }
+        if (k == 1) {
+            return Math.min(nums1[i], nums2[j]);
+        }
+        int nextI = Math.min(i + k / 2 - 1, nums1.length);
+        int nextJ = Math.min(j + k / 2 - 1, nums2.length);
+        if (nums1[i] <= nums2[j]) {
+            return findKth(nums1, nums2, nextI, j, k - (nextI - i));
+        } else {
+            return findKth(nums1, nums2, i, nextJ, k - (nextJ - j));
+        }
+    }
+
 }
 
 /**
