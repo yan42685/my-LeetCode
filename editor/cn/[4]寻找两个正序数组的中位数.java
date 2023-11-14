@@ -16,41 +16,14 @@ public class Solution {
     }
 
     /**
-     * k从1开始算, i和j从1开始算，右开区间
-     * 一般情况的解空间是nums1前面 i+1 个数，和nums2前面 j+1个数，其中i+j == k+1
+     * 作用：找到两个有序数组中第k小的元素
+     * 原理：
+     * 初始解空间是nums1[0, x] nums2[0, y]  x+y == k-1或k-2 所以必定存在x<=k/2<=y 或y<=k/2<=x
+     * i和j是解空间起点
      * 一般情况每次排除Math.min(k/2, nums1.length - i) 或 Math.min(k/2, nums2.length-j)个数
-     * 边界条件是i == nums1.length || j == nums2.length || k == 1
+     * 边界条件是i == nums1.length || j == nums2.length || k-1 == 0
      */
-
-//    public int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
-//        if (i >= nums1.length) {
-//            return nums2[j + k - 1];
-//        }
-//        if (j >= nums2.length) {
-//            return nums1[i + k - 1];
-//        }
-//        if (k == 1) {
-//            return Math.min(nums1[i], nums2[j]);
-//        }
-//
-//        int lastToBeExcluded1 = Integer.MAX_VALUE;
-//        int lastTobeExcluded2 = Integer.MAX_VALUE;
-//        if (i + k / 2 - 1 < nums1.length) {
-//            lastToBeExcluded1 = nums1[i + k / 2 - 1];
-//        }
-//        if (j + k / 2 - 1 < nums2.length) {
-//            lastTobeExcluded2 = nums2[j + k / 2 - 1];
-//        }
-//
-//        // 必定会排除2/k个元素
-//        if (lastToBeExcluded1 <= lastTobeExcluded2) {
-//            return findKth(nums1, nums2, k - k / 2, i + k / 2, j);
-//        } else {
-//            return findKth(nums1, nums2, k - k / 2, i, j + k / 2);
-//        }
-//    }
-
-    public int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
+    int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
         if (i == nums1.length) {
             return nums2[j + k - 1];
         }
@@ -61,63 +34,15 @@ public class Solution {
             return Math.min(nums1[i], nums2[j]);
         }
 
-        // 计算两个数组中待比较元素的索引
-        int idx1 = Math.min(i + k / 2 - 1, nums1.length - 1);
-        int idx2 = Math.min(j + k / 2 - 1, nums2.length - 1);
-
-        if (nums1[idx1] <= nums2[idx2]) {
-            return findKth(nums1, nums2, k - (idx1 - i + 1), idx1 + 1, j);
+        int index1 = Math.min(i + k / 2 - 1, nums1.length - 1);
+        int index2 = Math.min(j + k / 2 - 1, nums2.length - 1);
+        if (nums1[index1] <= nums2[index2]) {
+            return findKth(nums1, nums2, k - (index1 - i + 1), index1 + 1, j);
         } else {
-            return findKth(nums1, nums2, k - (idx2 - j + 1), i, idx2 + 1);
+            return findKth(nums1, nums2, k - (index2 - j + 1), i, index2 + 1);
         }
     }
 }
 
-/**
- * 建议跳过此题，看懂题解也写不出来的
- */
-//public class Solution {
-//    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-//        int total = nums1.length + nums2.length;
-//        // 是否奇数
-//        if (total % 2 == 1) {
-//            return findKth(nums1, nums2, total / 2 + 1);
-//        } else {
-//            return (findKth(nums1, nums2, total / 2) + findKth(nums1, nums2, total / 2 + 1)) / 2.0;
-//        }
-//    }
-//
-//    private int findKth(int[] nums1, int[] nums2, int k) {
-//        int right1 = nums1.length;
-//        int right2 = nums2.length;
-//        int left1 = 0;
-//        int left2 = 0;
-//        // 不断排除小于kth的数，并减少k
-//        while (true) {
-//            // 已知三个边界条件
-//            if (left1 == right1) {
-//                return nums2[left2 + k - 1];
-//            }
-//            if (left2 == right2) {
-//                return nums1[left1 + k - 1];
-//            }
-//            // 这个判断要放在最后因为需要前两个判断排除数组越界情况
-//            if (k == 1) {
-//                return Math.min(nums1[left1], nums2[left2]);
-//            }
-//            // 排除k个元素
-//            int p1 = Math.min(left1 + k / 2 - 1, right1 - 1);
-//            int p2 = Math.min(left2 + k / 2 - 1, right2 - 1);
-//            if (nums1[p1] <= nums2[p2]) {
-//                k -= p1 - left1 + 1;
-//                left1 = p1 + 1;
-//            } else {
-//                k -= p2 - left2 + 1;
-//                left2 = p2 + 1;
-//            }
-//        }
-//    }
-//}
-//
 
 //leetcode submit region end(Prohibit modification and deletion)
