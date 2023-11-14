@@ -34,6 +34,7 @@ public class Solution {
             return Math.min(nums1[i], nums2[j]);
         }
 
+        // 可能被排除的最后一个索引
         int index1 = Math.min(i + k / 2 - 1, nums1.length - 1);
         int index2 = Math.min(j + k / 2 - 1, nums2.length - 1);
         if (nums1[index1] <= nums2[index2]) {
