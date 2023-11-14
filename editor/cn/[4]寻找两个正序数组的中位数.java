@@ -7,10 +7,10 @@ public class Solution {
         int numsCount = nums1.length + nums2.length;
         // 奇数
         if (numsCount % 2 == 1) {
-            return findKth(nums1, nums2, numsCount / 2 + 1);
+            return findKth(nums1, nums2, numsCount / 2 + 1, 0, 0);
         } else {
-            double leftMidian = findKth(nums1, nums2, numsCount / 2);
-            double rightMidian = findKth(nums1, nums2, numsCount / 2 + 1);
+            double leftMidian = findKth(nums1, nums2, numsCount / 2, 0, 0);
+            double rightMidian = findKth(nums1, nums2, numsCount / 2 + 1, 0, 0);
             return (leftMidian + rightMidian) / 2.0;
         }
     }
@@ -21,7 +21,25 @@ public class Solution {
      * 一般情况每次排除Math.min(k/2, nums1.length - i) 或 Math.min(k/2, nums2.length-j)个数
      * 边界条件是i == nums1.length || j == nums2.length || k == 1
      */
-    public int findKth(int[] nums1, int[] nums2, int i, int j, int k) {
+//    public int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
+//        if (i == nums1.length) {
+//            return nums2[j + k - 1];
+//        }
+//        if (j == nums2.length) {
+//            return nums1[i + k - 1];
+//        }
+//        if (k == 1) {
+//            return Math.min(nums1[i], nums2[j]);
+//        }
+//        int nextI = Math.min(i + k / 2, nums1.length);
+//        int nextJ = Math.min(j + k / 2, nums2.length);
+//        if (nums1[i] <= nums2[j]) {
+//            return findKth(nums1, nums2, k - (nextI - i), nextI, j);
+//        } else {
+//            return findKth(nums1, nums2, k - (nextJ - j), i, nextJ);
+//        }
+//    }
+    public int findKth(int[] nums1, int[] nums2, int k, int i, int j) {
         if (i == nums1.length) {
             return nums2[j + k - 1];
         }
@@ -31,15 +49,21 @@ public class Solution {
         if (k == 1) {
             return Math.min(nums1[i], nums2[j]);
         }
-        int nextI = Math.min(i + k / 2 - 1, nums1.length);
-        int nextJ = Math.min(j + k / 2 - 1, nums2.length);
-        if (nums1[i] <= nums2[j]) {
-            return findKth(nums1, nums2, nextI, j, k - (nextI - i));
+
+        int mid1 = Integer.MAX_VALUE, mid2 = Integer.MAX_VALUE;
+        if (i + k / 2 - 1 < nums1.length) {
+            mid1 = nums1[i + k / 2 - 1];
+        }
+        if (j + k / 2 - 1 < nums2.length) {
+            mid2 = nums2[j + k / 2 - 1];
+        }
+
+        if (mid1 < mid2) {
+            return findKth(nums1, nums2, k - k / 2, i + k / 2, j);
         } else {
-            return findKth(nums1, nums2, i, nextJ, k - (nextJ - j));
+            return findKth(nums1, nums2, k - k / 2, i, j + k / 2);
         }
     }
-
 }
 
 /**
