@@ -3,7 +3,7 @@
 import java.util.LinkedList;
 
 /**
- * 解空间视角二：[min, max]整数集合，思路更通用，但是要求解是整数，时间复杂度稍微高一点
+ * 解空间视角二：[min, max]整数集合，思路更通用, 时间复杂度稍微高一点
  * 时间复杂度 O(log(m+n)log(max-min))
  */
 public class Solution {

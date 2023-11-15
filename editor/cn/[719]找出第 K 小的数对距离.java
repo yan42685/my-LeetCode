@@ -23,7 +23,7 @@ class Solution {
             while (j < nums.length && nums[j] - nums[i] <= target) {
                 j++;
             }
-            count += j - i - 1;
+            count += j - 1 - i;
         }
         return count;
     }
