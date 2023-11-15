@@ -15,7 +15,7 @@ class Solution {
         // 等效while (left < right)
         while (Math.abs(right - left) > EPSILON) {
             double mid = left + (right - left) / 2;
-            if (lessOrEqualCount(arr, mid) <= k) {
+            if (lessOrEqualCount(arr, mid) <= k - 1) {
                 left = mid;
             } else {
                 right = mid;
@@ -26,19 +26,21 @@ class Solution {
 
     private int lessOrEqualCount(int[] arr, double target) {
         int count = 0;
+        int i = 0;  // 分子索引
         // 分母索引
-        int j = 1;
-        while (j < arr.length) {
-            int i = 0;
-            while (i < j && (double) arr[i + 1] / arr[j] <= target) {
+        for (int j = 1; j < arr.length; j++) {
+            while (i + 1 < j && (double) arr[i + 1] / arr[j] <= target) {
                 ++i;
             }
+            // 当 i = j-1 且 (double) arr[i] / arr[j] > target时不应增加count
+            if ((double) arr[i] / arr[j] <= target) {
+                count += i + 1;
+            }
+            // 记录target
             if (Math.abs((double) arr[i] / arr[j] - target) < EPSILON) {
                 a = arr[i];
                 b = arr[j];
             }
-            count += i;
-            j++;
         }
         return count;
     }

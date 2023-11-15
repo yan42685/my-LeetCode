@@ -20,10 +20,12 @@ class Solution {
         int count = 0;
         int j = 1;
         for (int i = 0; i < nums.length - 1; i++) {
-            while (j < nums.length && nums[j] - nums[i] <= target) {
+            while (j + 1 < nums.length && nums[j + 1] - nums[i] <= target) {
                 j++;
             }
-            count += j - 1 - i;
+            if (nums[j] - nums[i] <= target) {
+                count += j - i;
+            }
         }
         return count;
     }
