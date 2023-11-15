@@ -12,6 +12,7 @@ public class Solution {
             } else {
                 // base case 2: 左中心，只剩两个元素或左边有重复元素时，target必定不等于nums[left]
                 if (nums[mid] == nums[left]) {
+                    // 不能写成left = mid + 1
                     ++left;
                 }
                 // 左边和右边至少有一边是有序的

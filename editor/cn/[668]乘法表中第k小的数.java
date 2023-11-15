@@ -15,6 +15,7 @@ class Solution {
         return left;
     }
 
+    // 看x是第i行的几倍
     private int lessOrEqualCount(int m, int n, int x) {
         int count = 0;
         for (int i = 1; i <= m; i++) {
