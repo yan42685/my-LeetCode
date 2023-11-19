@@ -8,23 +8,25 @@ class Solution {
         int n = grid.length;
         int[] dp = new int[n];
         System.arraycopy(grid[0], 0, dp, 0, n);
-        int min = Integer.MAX_VALUE;
-        int secondMin = Integer.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
-            min = Math.min(min, dp[i]);
-            secondMin = dp[i] != min ? Math.min(secondMin, dp[i]) : secondMin;
+        int prevMin = Integer.MAX_VALUE;
+        int prevSecondMin = Integer.MAX_VALUE;
+        for (int j = 0; j < n; j++) {
+            prevMin = Math.min(prevMin, dp[j]);
+            prevSecondMin = dp[j] != prevMin ? Math.min(prevSecondMin, dp[j]) : prevSecondMin;
         }
         for (int i = 1; i < n; i++) {
-            int tmpMin = Integer.MAX_VALUE;
-            int tmpSecondMin = Integer.MAX_VALUE;
+            int currMin = Integer.MAX_VALUE;
+            int currSecondMin = Integer.MAX_VALUE;
             for (int j = 0; j < n; j++) {
                 int lastChoice = dp[j] != prevMin ? prevMin : prevSecondMin;
                 dp[j] = lastChoice + grid[i][j];
-                min = Math.min(min, dp[i]);
-                secondMin = dp[i] != min ? Math.min(secondMin, dp[i]) : secondMin;
+                currMin = Math.min(currMin, dp[j]);
+                currSecondMin = dp[j] != currMin ? Math.min(currSecondMin, dp[j]) : currSecondMin;
             }
+            prevMin = currMin;
+            prevSecondMin = currSecondMin;
         }
-        return min;
+        return prevMin;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
