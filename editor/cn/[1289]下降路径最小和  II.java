@@ -7,12 +7,17 @@ class Solution {
         }
         int n = grid.length;
         int[] dp = new int[n];
-        System.arraycopy(grid[0], 0, dp, 0, n);
+        // 上一行的最小值和次小值
         int prevMin = Integer.MAX_VALUE;
         int prevSecondMin = Integer.MAX_VALUE;
         for (int j = 0; j < n; j++) {
-            prevMin = Math.min(prevMin, dp[j]);
-            prevSecondMin = dp[j] != prevMin ? Math.min(prevSecondMin, dp[j]) : prevSecondMin;
+            dp[j] = grid[0][j];
+            if (dp[j] < prevMin) {
+                prevSecondMin = prevMin;
+                prevMin = dp[j];
+            } else {
+                prevSecondMin = Math.min(dp[j], prevSecondMin);
+            }
         }
         for (int i = 1; i < n; i++) {
             int currMin = Integer.MAX_VALUE;
@@ -20,8 +25,12 @@ class Solution {
             for (int j = 0; j < n; j++) {
                 int lastChoice = dp[j] != prevMin ? prevMin : prevSecondMin;
                 dp[j] = lastChoice + grid[i][j];
-                currMin = Math.min(currMin, dp[j]);
-                currSecondMin = dp[j] != currMin ? Math.min(currSecondMin, dp[j]) : currSecondMin;
+                if (dp[j] < currMin) {
+                    currSecondMin = currMin;
+                    currMin = dp[j];
+                } else {
+                    currSecondMin = Math.min(dp[j], currSecondMin);
+                }
             }
             prevMin = currMin;
             prevSecondMin = currSecondMin;
