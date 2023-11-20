@@ -1,3 +1,7 @@
+
+/**
+ * 没必要用动态规划，这个时间复杂度一样，并且更直观
+ */
 class Solution {
     private static final int MOD = (int) (1e9 + 7);
     int[][] memo;
@@ -23,8 +27,8 @@ class Solution {
 
         for (int i = 0; i < locations.length; i++) {
             if (i != start) {
-                int consumption = Math.abs(locations[start] - locations[i]);
-                count = (count + dfs(locations, i, finish, fuel - consumption)) % MOD;
+                int cost = Math.abs(locations[start] - locations[i]);
+                count = (count + dfs(locations, i, finish, fuel - cost)) % MOD;
             }
         }
         memo[start][fuel] = count;
