@@ -1,5 +1,8 @@
 
 //leetcode submit region begin(Prohibit modification and deletion)
+/**
+ * 对比97题，如果方便初始化就多花点空间初始化，否则把逻辑都写在双重循环里
+ */
 class Solution {
     private static final int MOD = (int) 1e9 + 7;
     private List<String> board;

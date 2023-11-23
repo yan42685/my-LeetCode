@@ -17,21 +17,18 @@ class Solution {
                 --leftMin;
                 --leftMax;
             } else if (ch == '*') {
-                // * -> ) 的选择可以撤销
-                --leftMin;
-                // * -> ( 的选择无法撤销，这是刚需
-                ++leftMax;
+                --leftMin;  // * -> ) 的选择如果太多了可以撤销一部分
+                ++leftMax;  // * -> ( 的选择只能多不能少
             }
+            // 对'*'双重贪心，希望leftMin尽量为0，leftMax尽量大
             if (leftMax < 0) {
                 return false;
             }
-            // 贪心，希望leftMin尽量为0，leftMax尽量大
-            // 将 * -> ) 改为 * -> ‘’ 直到 leftMin == 0
-//            leftMin = Math.max(leftMin, 0);
+            // leftMin < 0 说明 * -> ) 太多了，要撤销成 * -> ""
+            leftMin = Math.max(leftMin, 0);
         }
         // 上面已经保证了右括号全部消除，下面需要保证左括号可以全部消除
-//        return leftMin == 0;
-        return leftMin <= 0;
+        return leftMin == 0;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
