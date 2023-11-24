@@ -7,7 +7,10 @@ import java.util.HashSet;
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
         HashSet<String> set = new HashSet<>(wordDict);
-        int maxLength = wordDict.stream().map(String::length).max(Integer::compareTo).orElse(0);
+        int maxLength = Integer.MIN_VALUE;
+        for (String str : wordDict) {
+            maxLength = Math.max(maxLength, str.length());
+        }
         boolean[] dp = new boolean[maxLength];
         dp[0] = true;
         for (int i = 1; i <= s.length(); i++) {
@@ -17,7 +20,7 @@ class Solution {
                     dp[curr] = true;
                     break;
                 }
-                dp[curr] = false;
+                dp[curr] = false;  // 这一句不能放在判断之前，因为上面的if依赖的状态可能是dp[curr]
             }
         }
         return dp[s.length() % maxLength];
