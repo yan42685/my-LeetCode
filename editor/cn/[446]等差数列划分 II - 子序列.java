@@ -3,16 +3,55 @@
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 class Solution {
     public int numberOfArithmeticSlices(int[] nums) {
-        
+        int n = nums.length;
+        if (n < 3) {
+            return 0;
+        }
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            // absent ? put new : get old,  finally return
+            map.computeIfAbsent(nums[i], k -> new LinkedList<Integer>()).add(i);
+        }
+        int result = 0;
+        // 以j, i结尾的子序列包含等差数列的个数，其中dp[i][j] = sum(dp[j][k] + 1)
+        int[][] dp = new int[n][n];
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                long target = 2L * nums[j] - nums[i];
+                if (target < Integer.MIN_VALUE || target > Integer.MAX_VALUE) {
+                    continue;
+                }
+                // 将long转化成int是必要的，因为自动装箱
+                for (int k : map.getOrDefault((int) target, Collections.emptyList())) {
+                    if (k < j) {
+                        dp[i][j] += dp[j][k] + 1;
+                    } else {
+                        break;
+                    }
+                }
+                result += dp[i][j];
+            }
+        }
+        return result;
+
     }
 }
 
 /**
  * HashMap优化版，如果重复元素较少，则O(N^2)  如果全是重复元素会退化到O(N^3)
+ * <p>
+ * 朴素思路
+ * <p>
+ * 朴素思路
+ * <p>
+ * 朴素思路
+ * <p>
+ * 朴素思路
  */
 //class Solution {
 //    public int numberOfArithmeticSlices(int[] nums) {
