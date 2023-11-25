@@ -18,9 +18,8 @@ class Solution {
     public int kInversePairs(int n, int k) {
         // 使用过的状态还可能使用到，不能只在同一个行滚动，至少得有两行
         int[][] dp = new int[2][k + 1];
-        // 虽然这个起点不符合dp定义，但是对于正确启动状态转移是必要的，为了让dp[2][1] = 1
-        dp[0][0] = 1;
-        for (int i = 1; i <= n; i++) {
+        dp[1][0] = 1;
+        for (int i = 2; i <= n; i++) {
             int prev = (i - 1) % 2;
             int curr = i % 2;
             dp[curr][0] = 1;
@@ -44,7 +43,8 @@ class Solution {
 //
 //    public int kInversePairs(int n, int k) {
 //        int[][] dp = new int[n + 1][k + 1];
-//        for (int i = 1; i <= n; i++) {
+//        dp[1][0] = 1;
+//        for (int i = 2; i <= n; i++) {
 //            for (int j = 0; j <= k; j++) {
 //                if (j == 0) {
 //                    dp[i][j] = 1;
