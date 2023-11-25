@@ -2,43 +2,42 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 
 /**
- * 1. dp[i][j]表示长度为n的自然数数组拥有k个逆序对的排列个数
- * 每次++i，新增逆序对个数 p ∈ [0, i-1]，又希望总逆序对为j个
- * 所以上一次的状态是 dp[i-1][j-p]，p ∈ [0, min(j, i-1)]
- * 所以dp[i][j] = sum(dp[i-1][j-p]), p ∈ [0, min(j, i-1)]
- * dp[i][j-1] = sum(dp[i-1][j-1-p]), p ∈ [0, min(j, i-1)]
- * 所以dp[i][j] = 
- * 2. 由于存在连续项求和，所以用前缀数组优化
- * <p>
- * dp[i][j]表示长度为n的自然数数组拥有k个逆序对的排列个数
- * 怎么划分dp[i][j]的子集? -> 将第i个数放在哪
- * dp[i-1][j] -> 放在末尾
- * dp[i][j-1] -> 放在所有地方
- * dp[i-1][j-1] -> 放在使得逆序对大于k的地方, 最关键的一点
- *
+ * https://leetcode.cn/problems/k-inverse-pairs-array/solutions/313978/javadpxiang-xi-jie-xi-by-tlzxsun/
  */
-
 class Solution {
-    private static final int MOD = (int) 1e9 + 7;
+    int mod = 1000000007;
 
     public int kInversePairs(int n, int k) {
-        int[][] dp = new int[n + 1][k + 1];
-        dp[0][0] = 1;
+        if (k > maxPairs(n)) {
+            return 0;
+        }
+        //dp[i][j]表示到n为止，逆序数为k的个数
+        int dp[][] = new int[n + 1][k + 1];
         for (int i = 1; i <= n; i++) {
-            for (int j = 0; j <= k; j++) {
-                if (j == 0) {
-                    dp[i][j] = 1;
-                } else {
-                    if (j >= i) {
-                        dp[i][j] = (dp[i][j - 1] + dp[i - 1][j] - dp[i - 1][j - 1] + MOD) % MOD;
-                    } else {
-                        dp[i][j] = (dp[i][j - 1] + dp[i - 1][j]) % MOD;
-                    }
+            //0个逆序数对只有一种情况
+            dp[i][0] = 1;
+            for (int j = 1; j <= Math.min(k, maxPairs(i)); j++) {
+                //从前面可以得到dp[i][j] = sum(dp[i-1][m])，m >= Math.max(0, j - i + 1)
+                //这里是歪打正着，那就来分析一下为什么会这样
+                //dp[i][j] = dp[i - 1][j - i + 1] + dp[i - 1][j - i + 2] + ... + dp[i - 1][j];
+                //dp[i][j - 1] = dp[i - 1][j - 1 - i + 1] + dp[i - 1][j - 1 - i + 1] + ... + dp[i - 1][j - 1];
+                //dp[i][j] - dp[i - 1][j - 1] = dp[i - 1][j] - dp[i - 1][j - i]
+                //由于j - 1 - i可能小于0，因此减的时候需要判断避免越界
+                dp[i][j] = (dp[i][j - 1] + dp[i - 1][j] - (j - i + 1 > 0 ? dp[i - 1][j - i] : 0)) % mod;
+                //由于取模后减出来可能是负数，需要特殊处理
+                if (dp[i][j] < 0) {
+                    dp[i][j] += mod;
                 }
             }
         }
-
         return dp[n][k];
+    }
+
+    /**
+     * n个数，最大逆序数对数量(1 + 2 + 3 + ... + n-1)
+     */
+    int maxPairs(int n) {
+        return n * (n - 1) / 2;
     }
 }
 
@@ -52,7 +51,7 @@ class Solution {
 //            for (int j = 0; j <= k; j++) {
 //                if (j == 0) {
 //                    dp[i][j] = 1;
-////                    preSum[i][j] = 1;
+//                    preSum[i][j] = 1;
 //                    continue;
 //                }
 //                for (int p = 0; p <= Math.min(j, i - 1); p++) {
@@ -63,5 +62,4 @@ class Solution {
 //        return dp[n][k];
 //    }
 //}
-//
 //leetcode submit region end(Prohibit modification and deletion)
