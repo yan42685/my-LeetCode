@@ -2,7 +2,11 @@
 //leetcode submit region begin(Prohibit modification and deletion)
 
 /**
- * https://leetcode.cn/problems/k-inverse-pairs-array/solutions/313978/javadpxiang-xi-jie-xi-by-tlzxsun/
+ * https://leetcode.cn/problems/k-inverse-pairs-array/solutions/1096189/tong-ge-lai-shua-ti-la-yi-ti-wu-jie-bao-ej4ym/
+ * dp[i][j] = dp[i-1][j] + dp[i-1][j-1] + ... + dp[i-1][j-(i-1)]
+ * dp[i][j-1] =            dp[i-1][j-1] + ... + dp[i-1][j-1-(i-2)] + dp[i-1][j-1-(i-1)]
+ * 上减下、移项，得到
+ * dp[i][j] = dp[i-1][j] + dp[i][j-1] - dp[i-1][j-i]
  */
 class Solution {
     int mod = 1000000007;
